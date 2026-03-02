@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Users, Clock, DollarSign, Phone, CalendarCheck, Star, ShieldCheck } from 'lucide-react';
+import { Building2, Users, Clock, DollarSign, Phone, CalendarCheck, Star, Tag } from 'lucide-react';
 import { Button } from './ui/button';
 
 export default function PrivateEvents() {
@@ -27,6 +27,11 @@ export default function PrivateEvents() {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Reserve the entire facility exclusively for your group — perfect for school events, corporate outings, church groups, and large private parties!
           </p>
+          {/* Weekday Discount Banner */}
+          <div className="mt-6 inline-flex items-center gap-2 bg-green-100 border border-green-300 text-green-800 px-5 py-2.5 rounded-full font-semibold text-base shadow-sm">
+            <Tag className="w-5 h-5 flex-shrink-0" />
+            Weekday Special: Save $100 when you book Monday – Thursday!
+          </div>
         </div>
 
         {/* Pricing Cards */}
@@ -42,10 +47,17 @@ export default function PrivateEvents() {
             </div>
 
             <div className="bg-white rounded-2xl p-6 mb-6 shadow-md">
-              <div className="flex items-center justify-center mb-2">
-                <div className="text-center">
+              <div className="grid grid-cols-2 divide-x divide-gray-100">
+                <div className="text-center pr-4">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Fri – Sun</p>
                   <p className="text-3xl font-bold text-indigo-600">$650</p>
-                  <p className="text-sm text-gray-600">+ Tax</p>
+                  <p className="text-sm text-gray-500">+ Tax</p>
+                </div>
+                <div className="text-center pl-4">
+                  <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Mon – Thu</p>
+                  <p className="text-3xl font-bold text-green-600">$550</p>
+                  <p className="text-sm text-gray-500">+ Tax</p>
+                  <span className="inline-block mt-1 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">Save $100</span>
                 </div>
               </div>
             </div>
@@ -63,13 +75,6 @@ export default function PrivateEvents() {
                 <div>
                   <p className="font-semibold text-gray-900">2 Hours Exclusive Access</p>
                   <p className="text-sm text-gray-600">Full use of all play areas and party room</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <ShieldCheck className="w-6 h-6 text-indigo-600 flex-shrink-0 mt-1" />
-                <div>
-                  <p className="font-semibold text-gray-900">Dedicated Staff</p>
-                  <p className="text-sm text-gray-600">Our team ensures a smooth, safe event</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -104,10 +109,17 @@ export default function PrivateEvents() {
             </div>
 
             <div className="bg-white rounded-2xl p-6 mb-6 shadow-md">
-              <div className="flex items-center justify-center mb-2">
-                <div className="text-center">
+              <div className="grid grid-cols-2 divide-x divide-gray-100">
+                <div className="text-center pr-4">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Fri – Sun</p>
                   <p className="text-3xl font-bold text-violet-600">$800</p>
-                  <p className="text-sm text-gray-600">+ Tax</p>
+                  <p className="text-sm text-gray-500">+ Tax</p>
+                </div>
+                <div className="text-center pl-4">
+                  <p className="text-xs font-semibold text-green-600 uppercase tracking-wide mb-1">Mon – Thu</p>
+                  <p className="text-3xl font-bold text-green-600">$700</p>
+                  <p className="text-sm text-gray-500">+ Tax</p>
+                  <span className="inline-block mt-1 bg-green-100 text-green-700 text-xs font-semibold px-2 py-0.5 rounded-full">Save $100</span>
                 </div>
               </div>
             </div>
@@ -125,13 +137,6 @@ export default function PrivateEvents() {
                 <div>
                   <p className="font-semibold text-gray-900">3 Hours Exclusive Access</p>
                   <p className="text-sm text-gray-600">Full use of all play areas and party room</p>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <ShieldCheck className="w-6 h-6 text-violet-600 flex-shrink-0 mt-1" />
-                <div>
-                  <p className="font-semibold text-gray-900">Dedicated Staff</p>
-                  <p className="text-sm text-gray-600">Our team ensures a smooth, safe event</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
@@ -161,9 +166,9 @@ export default function PrivateEvents() {
               { icon: Building2, text: 'Exclusive use of the entire facility' },
               { icon: Users, text: 'All play areas open for your group' },
               { icon: CalendarCheck, text: 'Private party room access' },
-              { icon: ShieldCheck, text: 'Dedicated staff for your event' },
               { icon: Star, text: 'No other guests during your rental' },
               { icon: Clock, text: 'Flexible scheduling available' },
+              { icon: Tag, text: '$100 off when you book Monday – Thursday' },
             ].map(({ icon: Icon, text }, i) => (
               <div key={i} className="flex items-center space-x-3 p-3 bg-indigo-50 rounded-xl">
                 <Icon className="w-5 h-5 text-indigo-600 flex-shrink-0" />

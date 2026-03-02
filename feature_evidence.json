@@ -2,8 +2,8 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-in-the-privateevents-component-update-the-2-hour-rental-price-to-650-and-the-3-hour-rental-price-to-800-for-all-displayed-pricing-cards-weekday-and-or-weekend-as-applicable",
-      "featureTitle": "In the PrivateEvents component, update the 2-hour rental price to $650 and the 3-hour rental price to $800 for all displayed pricing cards (weekday and/or weekend as applicable).",
+      "featureId": "feature-remove-all-mentions-of-dedicated-staff-staff-assistance-or-any-similar-language-implying-that-staff-will-be-assigned-to-or-help-manage-a-private-party-from-the-privateevents-component-and-any-other-frontend-components-that-reference-it-the-copy-should-reflect-that-guests-manage-their-own-party",
+      "featureTitle": "Remove all mentions of 'dedicated staff', 'staff assistance', or any similar language implying that staff will be assigned to or help manage a private party, from the PrivateEvents component and any other frontend components that reference it. The copy should reflect that guests manage their own party.",
       "files": [
         "frontend/src/components/PrivateEvents.tsx"
       ],
@@ -19,6 +19,27 @@
       ],
       "testIds": [
         "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-100-weekday-discount-to-the-private-events-section-display-a-discounted-price-for-bookings-made-on-monday-through-thursday-for-example-if-the-standard-price-is-650-for-2-hours-show-550-for-weekday-bookings-if-800-for-3-hours-show-700-for-weekday-bookings-clearly-label-the-discount-e-g-weekday-discount-save-100-when-you-book-monday-thursday",
+      "featureTitle": "Add a $100 weekday discount to the Private Events section. Display a discounted price for bookings made on Monday through Thursday. For example, if the standard price is $650 for 2 hours, show $550 for weekday bookings; if $800 for 3 hours, show $700 for weekday bookings. Clearly label the discount (e.g., 'Weekday discount: Save $100 when you book Monday–Thursday').",
+      "files": [
+        "frontend/src/components/PrivateEvents.tsx"
+      ],
+      "components": [
+        "authorization@1.0.1",
+        "blob-storage@2.0.3",
+        "http-outcalls@1.1.1",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-2"
       ],
       "confidence": "high"
     }

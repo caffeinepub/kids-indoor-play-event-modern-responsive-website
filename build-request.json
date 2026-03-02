@@ -1,36 +1,54 @@
 {
   "kind": "build_request",
-  "title": "Update private event pricing (2hr → $650, 3hr → $800)",
+  "title": "Remove dedicated staff mentions and add weekday discount for private events",
   "projectName": "KIDS Indoor Play",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "In the PrivateEvents component, update the 2-hour rental price to $650 and the 3-hour rental price to $800 for all displayed pricing cards (weekday and/or weekend as applicable).",
+      "text": "Remove all mentions of 'dedicated staff', 'staff assistance', or any similar language implying that staff will be assigned to or help manage a private party, from the PrivateEvents component and any other frontend components that reference it. The copy should reflect that guests manage their own party.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "change 2 hours price for private event to $650 and $800 for 3 hours."
+          "remove any mention of dedicated staff. They take care of their party themselves."
         ]
       },
       "acceptanceCriteria": [
-        "The 2-hour private event rental price displays as $650 in the PrivateEvents section.",
-        "The 3-hour private event rental price displays as $800 in the PrivateEvents section.",
-        "No other pricing values in the PrivateEvents section are changed.",
-        "The pricing cards render correctly on both desktop and mobile layouts."
+        "No text mentioning 'dedicated staff', 'staff', 'assisted', or equivalent language appears in the Private Events section.",
+        "The section still clearly describes the private rental offering without implying hosted or staffed service."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add a $100 weekday discount to the Private Events section. Display a discounted price for bookings made on Monday through Thursday. For example, if the standard price is $650 for 2 hours, show $550 for weekday bookings; if $800 for 3 hours, show $700 for weekday bookings. Clearly label the discount (e.g., 'Weekday discount: Save $100 when you book Monday–Thursday').",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "add $100 discount if the private party is booked for weekdays ( monday - thursday)."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Private Events section displays weekday pricing that is $100 less than the standard price for both rental tiers.",
+        "The weekday discount is clearly labeled, specifying Monday through Thursday.",
+        "Standard (weekend) pricing is still visible for comparison or clearly indicated.",
+        "No backend changes are required — pricing is displayed statically in the frontend."
       ]
     }
   ],
   "constraints": [
-    "Only update the private event pricing values in PrivateEvents.tsx — do not modify any other pricing sections (DailyAdmission, BirthdayPackages, GroupDiscounts, etc.)."
+    "Do not change the backend schema or any backend pricing data.",
+    "Pricing is displayed as static content in the frontend; no backend calls needed for this change."
   ],
   "nonGoals": [
-    "Changing any other pricing tiers or sections.",
-    "Backend changes — pricing is static/hardcoded in the frontend component.",
-    "Redesigning the PrivateEvents section layout."
+    "Adding an online booking or calendar system.",
+    "Dynamically calculating weekday vs. weekend pricing based on a selected date.",
+    "Changing any other pricing sections (daily admission, birthday packages, group discounts)."
   ],
   "imageRequirements": {
     "required": [],
