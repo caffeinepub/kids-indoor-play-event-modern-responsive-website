@@ -1,0 +1,172 @@
+type http_request_result = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type http_header = 
+ record {
+   name: text;
+   value: text;
+ };
+type WebsiteContent = 
+ record {
+   aboutText: text;
+   contactInfo: text;
+   homepageText: text;
+   packagesText: text;
+   pricingText: text;
+ };
+type WaiverForm = 
+ record {
+   agreeTerms: bool;
+   children: vec Child;
+   id: text;
+   parentEmail: text;
+   parentName: text;
+   parentPhone: text;
+   termsAndConditions: text;
+   timestamp: int;
+ };
+type VlogVideo = 
+ record {
+   description: text;
+   id: text;
+   timestamp: int;
+   title: text;
+   url: text;
+ };
+type UserProfile = record {name: text;};
+type TransformationOutput = 
+ record {
+   body: blob;
+   headers: vec http_header;
+   status: nat;
+ };
+type TransformationInput = 
+ record {
+   context: blob;
+   response: http_request_result;
+ };
+type Time = int;
+type Testimonial = 
+ record {
+   customerName: text;
+   id: text;
+   review: text;
+   timestamp: int;
+ };
+type StreamingToken = 
+ record {
+   index: nat;
+   resource: text;
+ };
+type StreamingStrategy = variant {
+                           Callback:
+                            record {
+                              callback: StreamingCallback;
+                              token: StreamingToken;
+                            };};
+type StreamingCallbackHttpResponse = 
+ record {
+   body: blob;
+   token: opt StreamingToken;
+ };
+type StreamingCallback = func (StreamingToken) ->
+                          (StreamingCallbackHttpResponse) query;
+type MarketingInfo = 
+ record {
+   email: text;
+   name: text;
+   phone: text;
+   timestamp: int;
+ };
+type HttpResponse = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   status_code: nat16;
+   streaming_strategy: opt StreamingStrategy;
+ };
+type HttpRequest = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   method: text;
+   url: text;
+ };
+type HeaderField = 
+ record {
+   text;
+   text;
+ };
+type GalleryImage = 
+ record {
+   description: text;
+   id: text;
+   timestamp: int;
+   url: text;
+ };
+type FileMetadata = 
+ record {
+   mimeType: text;
+   path: text;
+   size: nat;
+ };
+type EmailSubscriber = 
+ record {
+   email: text;
+   timestamp: Time;
+ };
+type CommunityPost = 
+ record {
+   author: text;
+   content: text;
+   id: text;
+   timestamp: int;
+   title: text;
+ };
+type Child = 
+ record {
+   birthday: opt text;
+   name: text;
+ };
+service : {
+  addCommunityPost: (title: text, content: text, author: text) -> ();
+  addGalleryImage: (url: text, description: text) -> ();
+  addTestimonial: (customerName: text, review: text) -> ();
+  addVlogVideo: (title: text, url: text, description: text) -> ();
+  exportEmailSubscribersCSV: () -> (text);
+  fileDelete: (path: text) -> ();
+  fileList: () -> (vec FileMetadata) query;
+  fileUpload: (path: text, mimeType: text, chunk: blob, complete: bool) -> ();
+  getAllMarketingInfo: () -> (vec MarketingInfo) query;
+  getAllWaivers: () -> (vec WaiverForm) query;
+  getCommunityPosts: () -> (vec CommunityPost) query;
+  getCurrentUserProfile: () -> (opt UserProfile) query;
+  getEmailSubscribers: () -> (vec EmailSubscriber);
+  getGalleryImages: () -> (vec GalleryImage) query;
+  getNewWaivers: (sinceTimestamp: int) -> (vec WaiverForm) query;
+  getSubscriberCount: () -> (nat);
+  getTestimonials: () -> (vec Testimonial) query;
+  getVlogVideos: () -> (vec VlogVideo) query;
+  getWebsiteContent: () -> (opt WebsiteContent) query;
+  httpStreamingCallback: (token: StreamingToken) ->
+   (StreamingCallbackHttpResponse) query;
+  http_request: (request: HttpRequest) -> (HttpResponse) query;
+  importWaiversFromCSV: (csvUrl: text) -> (text);
+  initializeAuth: () -> ();
+  isCurrentUserAdmin: () -> (bool) query;
+  removeCommunityPost: (id: text) -> ();
+  removeGalleryImage: (id: text) -> ();
+  removeTestimonial: (id: text) -> ();
+  removeVlogVideo: (id: text) -> ();
+  saveCurrentUserProfile: (profile: UserProfile) -> ();
+  searchWaivers: (searchTerm: text) -> (vec WaiverForm) query;
+  submitWaiver: (parentName: text, parentEmail: text, parentPhone: text,
+   children: vec Child, agreeTerms: bool, termsAndConditions: text) -> (
+   text);
+  subscribeEmail: (email: text) -> (bool);
+  transform: (input: TransformationInput) -> (TransformationOutput) query;
+  updateWebsiteContent: (content: WebsiteContent) -> ();
+}

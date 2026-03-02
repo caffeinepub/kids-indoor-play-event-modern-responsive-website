@@ -1,0 +1,24 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Update private event pricing (2hr → $650, 3hr → $800)",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Update the 2-hour rental price to $650 and the 3-hour rental price to $800 in the PrivateEvents component for all displayed pricing cards",
+      "acceptanceCriteria": [
+        "The 2-hour private event rental price displays as $650 in the PrivateEvents section.",
+        "The 3-hour private event rental price displays as $800 in the PrivateEvents section.",
+        "No other pricing values in the PrivateEvents section are changed.",
+        "The pricing cards render correctly on both desktop and mobile layouts."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/PrivateEvents.tsx",
+          "operation": "modify",
+          "description": "Update the hardcoded pricing values in the PrivateEvents component. Change the 2-hour rental price from its current value to $650 (weekday and weekend if applicable) and the 3-hour rental price to $800 (weekday and weekend if applicable). Ensure no other pricing values in this component are modified. Verify the component continues to render properly on both desktop and mobile viewports after the update."
+        }
+      ]
+    }
+  ]
+}

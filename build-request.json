@@ -1,0 +1,39 @@
+{
+  "kind": "build_request",
+  "title": "Update private event pricing (2hr → $650, 3hr → $800)",
+  "projectName": "KIDS Indoor Play",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "In the PrivateEvents component, update the 2-hour rental price to $650 and the 3-hour rental price to $800 for all displayed pricing cards (weekday and/or weekend as applicable).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "change 2 hours price for private event to $650 and $800 for 3 hours."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The 2-hour private event rental price displays as $650 in the PrivateEvents section.",
+        "The 3-hour private event rental price displays as $800 in the PrivateEvents section.",
+        "No other pricing values in the PrivateEvents section are changed.",
+        "The pricing cards render correctly on both desktop and mobile layouts."
+      ]
+    }
+  ],
+  "constraints": [
+    "Only update the private event pricing values in PrivateEvents.tsx — do not modify any other pricing sections (DailyAdmission, BirthdayPackages, GroupDiscounts, etc.)."
+  ],
+  "nonGoals": [
+    "Changing any other pricing tiers or sections.",
+    "Backend changes — pricing is static/hardcoded in the frontend component.",
+    "Redesigning the PrivateEvents section layout."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}
