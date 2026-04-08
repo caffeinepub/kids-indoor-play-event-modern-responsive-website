@@ -348,18 +348,39 @@ export default function AdminPlaceholder() {
     }
   };
 
-  // Handle admin reset: clear admin assignment, show message to guide re-login
+  // Handle admin reset: clear admin assignment, log out, return to login screen with message
   const handleResetAdmin = async () => {
     if (
       !confirm(
-        "Are you sure you want to reset admin access? You will need to log out and log back in with your new Internet Identity to reclaim admin access.",
+        "Are you sure you want to reset admin access? You will be logged out immediately. Sign in with your new Internet Identity to become the new admin.",
+      )
+    )
+      return;
+    try {
+      await resetAdminAccessMutation.mutateAsync();
+      // Clear the session so the new identity can claim admin on next login
+      await clear();
+      queryClient.clear();
+      setResetMessage(
+        "Admin access has been reset. Please sign in with your new Internet Identity to become the new admin.",
+      );
+    } catch (error) {
+      alert(`Failed to reset admin access: ${error}`);
+    }
+  };
+
+  // Handle reset from the login screen (no auth needed — backend allows anyone to call it)
+  const handleResetFromLoginScreen = async () => {
+    if (
+      !confirm(
+        "Reset admin access? The current admin will be removed. Sign in with your new Internet Identity afterward to claim admin.",
       )
     )
       return;
     try {
       await resetAdminAccessMutation.mutateAsync();
       setResetMessage(
-        "Admin access has been reset. Please log out and log back in with your new Internet Identity to claim admin access.",
+        "Admin access has been reset. Please sign in with your new Internet Identity to become the new admin.",
       );
     } catch (error) {
       alert(`Failed to reset admin access: ${error}`);
@@ -400,6 +421,14 @@ export default function AdminPlaceholder() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {resetMessage && (
+              <Alert className="border-amber-200 bg-amber-50">
+                <AlertCircle className="h-4 w-4 text-amber-600" />
+                <AlertDescription className="text-amber-800">
+                  {resetMessage}
+                </AlertDescription>
+              </Alert>
+            )}
             <Button
               onClick={handleLogin}
               disabled={
@@ -408,6 +437,7 @@ export default function AdminPlaceholder() {
               }
               className="w-full"
               size="lg"
+              data-ocid="admin-login-btn"
             >
               {loginStatus === "logging-in" ||
               initializeAccessControlMutation.isPending ? (
@@ -429,6 +459,23 @@ export default function AdminPlaceholder() {
                 </AlertDescription>
               </Alert>
             )}
+            <div className="pt-4 border-t border-border space-y-2">
+              <p className="text-sm text-muted-foreground text-center">
+                Need to change the admin account? Reset admin access below, then
+                sign in with your new Internet Identity.
+              </p>
+              <button
+                type="button"
+                onClick={handleResetFromLoginScreen}
+                disabled={resetAdminAccessMutation.isPending}
+                className="w-full border-2 border-red-500 text-red-600 rounded-lg px-4 py-2 font-semibold text-sm hover:bg-red-50 transition-colors disabled:opacity-50"
+                data-ocid="reset-admin-login-link"
+              >
+                {resetAdminAccessMutation.isPending
+                  ? "Resetting..."
+                  : "Reset Admin Access"}
+              </button>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -533,7 +580,7 @@ export default function AdminPlaceholder() {
           <div className="flex items-center gap-2">
             <Button
               onClick={handleResetAdmin}
-              variant="outline"
+              variant="destructive"
               size="sm"
               disabled={resetAdminAccessMutation.isPending}
               data-ocid="reset-admin-btn"
