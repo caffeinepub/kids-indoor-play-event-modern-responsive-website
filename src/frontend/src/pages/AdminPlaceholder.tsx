@@ -27,7 +27,7 @@ import {
   Upload,
   User,
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef } from "react";
 import {
   useAddGalleryImage,
   useExportEmailSubscribersCSV,
@@ -60,6 +60,9 @@ export default function AdminPlaceholder() {
   const [profileName, setProfileName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [resetMessage, setResetMessage] = useState("");
+  // Track whether we are in the "verifying access" retry loop after login
+  const [isVerifyingAccess, setIsVerifyingAccess] = useState(false);
+  const verifyRetryRef = useRef(0);
 
   const isAuthenticated = !!identity;
 
@@ -333,18 +336,41 @@ export default function AdminPlaceholder() {
 
   // Handle logout
   const handleLogout = async () => {
-    await clear();
+    // Clear query cache BEFORE calling clear() so no stale isCallerAdmin=false
+    // value survives into the next fresh login session.
     queryClient.clear();
+    await clear();
   };
 
   // Handle login: authenticate then call initializeAccessControl so a new II
-  // can claim the admin slot if it was reset (safe no-op if admin already set)
+  // can claim the admin slot if it was reset (safe no-op if admin already set).
+  // Includes a retry loop to handle any remaining race condition.
   const handleLogin = async () => {
     await login();
+    // Give the actor a moment to initialize after login resolves
+    await new Promise((resolve) => setTimeout(resolve, 500));
     try {
       await initializeAccessControlMutation.mutateAsync();
+      // onSuccess in useInitializeAccessControl already awaits refetchQueries,
+      // so isAdmin should be accurate by now. But guard against edge-case
+      // timing by retrying up to 3 times with 1-second intervals.
+      const MAX_RETRIES = 3;
+      verifyRetryRef.current = 0;
+      const verifyAdminAccess = async (): Promise<void> => {
+        const cached = queryClient.getQueryData<boolean>(["isCallerAdmin"]);
+        if (cached === true) return; // Already confirmed
+        if (verifyRetryRef.current >= MAX_RETRIES) return; // Give up, let UI show Access Denied
+        verifyRetryRef.current += 1;
+        setIsVerifyingAccess(true);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await queryClient.refetchQueries({ queryKey: ["isCallerAdmin"] });
+        await verifyAdminAccess();
+      };
+      await verifyAdminAccess();
     } catch {
       // Ignore — isCallerAdmin query will reflect actual state
+    } finally {
+      setIsVerifyingAccess(false);
     }
   };
 
@@ -358,9 +384,11 @@ export default function AdminPlaceholder() {
       return;
     try {
       await resetAdminAccessMutation.mutateAsync();
-      // Clear the session so the new identity can claim admin on next login
-      await clear();
+      // Clear ALL cached query state so the fresh login starts completely clean
       queryClient.clear();
+      await clear();
+      setIsVerifyingAccess(false);
+      verifyRetryRef.current = 0;
       setResetMessage(
         "Admin access has been reset. Please sign in with your new Internet Identity to become the new admin.",
       );
@@ -379,6 +407,10 @@ export default function AdminPlaceholder() {
       return;
     try {
       await resetAdminAccessMutation.mutateAsync();
+      // Clear ALL cached query state so the next login starts fresh
+      queryClient.clear();
+      setIsVerifyingAccess(false);
+      verifyRetryRef.current = 0;
       setResetMessage(
         "Admin access has been reset. Please sign in with your new Internet Identity to become the new admin.",
       );
@@ -528,13 +560,15 @@ export default function AdminPlaceholder() {
     );
   }
 
-  // Checking admin status
-  if (isCheckingAdmin || profileLoading) {
+  // Checking admin status (also show during post-login verification retry loop)
+  if (isCheckingAdmin || profileLoading || isVerifyingAccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto mb-4" />
-          <p className="text-gray-600">Loading...</p>
+          <p className="text-gray-600">
+            {isVerifyingAccess ? "Verifying access..." : "Loading..."}
+          </p>
         </div>
       </div>
     );

@@ -66,11 +66,21 @@ export function useInitializeAccessControl() {
 
   return useMutation({
     mutationFn: async () => {
-      if (!actor) throw new Error("Actor not available");
-      return actor.initializeAccessControl();
+      // Retry up to 5 times (500ms apart) in case the actor isn't ready yet
+      // right after login() resolves — this is the root cause of the "Actor not
+      // available" silent failure that leaves first-time admins stuck.
+      for (let attempt = 0; attempt < 5; attempt++) {
+        if (actor) {
+          return actor.initializeAccessControl();
+        }
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+      throw new Error("Actor not available after retries");
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["isCallerAdmin"] });
+    onSuccess: async () => {
+      // Use refetchQueries so the fresh value is fetched and settled before
+      // the component re-renders and evaluates isAdmin.
+      await queryClient.refetchQueries({ queryKey: ["isCallerAdmin"] });
     },
   });
 }
@@ -85,7 +95,8 @@ export function useResetAdminAccess() {
       return actor.resetAdminAccess();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["isCallerAdmin"] });
+      // Remove all cached data so the next login starts completely fresh
+      queryClient.removeQueries({ queryKey: ["isCallerAdmin"] });
     },
   });
 }
