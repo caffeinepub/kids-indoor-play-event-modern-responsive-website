@@ -1,0 +1,208 @@
+type WebsiteContent = 
+ record {
+   aboutText: text;
+   contactInfo: text;
+   homepageText: text;
+   operatingHours: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = record {name: text;};
+type UnifiedWaiverForm = 
+ record {
+   agreeUnifiedTerms: bool;
+   children: vec Child;
+   id: text;
+   parentEmail: text;
+   parentName: text;
+   parentPhone: text;
+   termsAndConditions: text;
+   timestamp: int;
+   visitCount: nat;
+ };
+type TranslationEntry = 
+ record {
+   originalText: text;
+   translatedText: text;
+ };
+type Time = int;
+type Testimonial = 
+ record {
+   customerName: text;
+   id: text;
+   review: text;
+   timestamp: int;
+ };
+type StreamingToken = 
+ record {
+   index: nat;
+   resource: text;
+ };
+type StreamingStrategy = variant {
+                           Callback:
+                            record {
+                              callback: StreamingCallback;
+                              token: StreamingToken;
+                            };};
+type StreamingCallbackHttpResponse = 
+ record {
+   body: blob;
+   token: opt StreamingToken;
+ };
+type StreamingCallback = func (StreamingToken) ->
+                          (StreamingCallbackHttpResponse) query;
+type MarketingInfo = 
+ record {
+   email: text;
+   name: text;
+   phone: text;
+   timestamp: int;
+ };
+type LanguagePreference = 
+ record {
+   language: text;
+   userId: principal;
+ };
+type HttpResponse = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   status_code: nat16;
+   streaming_strategy: opt StreamingStrategy;
+ };
+type HttpRequest = 
+ record {
+   body: blob;
+   headers: vec HeaderField;
+   method: text;
+   url: text;
+ };
+type HeaderField = 
+ record {
+   text;
+   text;
+ };
+type GalleryImage = 
+ record {
+   description: text;
+   id: text;
+   timestamp: int;
+   url: text;
+ };
+type FileMetadata = 
+ record {
+   mimeType: text;
+   path: text;
+   size: nat;
+ };
+type EmailSubscriber = 
+ record {
+   email: text;
+   timestamp: Time;
+ };
+type ContactSubmission = 
+ record {
+   email: text;
+   eventDate: text;
+   id: text;
+   message: text;
+   name: text;
+   numChildren: nat;
+   phone: text;
+   timestamp: int;
+ };
+type CommunityPost = 
+ record {
+   author: text;
+   content: text;
+   id: text;
+   timestamp: int;
+   title: text;
+ };
+type Child = 
+ record {
+   birthday: opt text;
+   name: text;
+ };
+type BirthdayPackage = 
+ record {
+   additionalChildPrice: nat;
+   description: text;
+   id: text;
+   includedChildren: nat;
+   name: text;
+   roomTime: text;
+   socksIncluded: nat;
+   weekdayPrice: nat;
+   weekendPrice: nat;
+ };
+service : {
+  addBirthdayPackage: (name: text, weekdayPrice: nat, weekendPrice: nat,
+   includedChildren: nat, additionalChildPrice: nat, socksIncluded: nat,
+   roomTime: text, description: text) -> ();
+  addCommunityPost: (title: text, content: text, author: text) -> ();
+  addContactSubmission: (name: text, email: text, phone: text, eventDate:
+   text, numChildren: nat, message: text) -> ();
+  addGalleryImage: (url: text, description: text) -> ();
+  addOrUpdateTranslation: (originalText: text, translatedText: text) -> ();
+  addTestimonial: (customerName: text, review: text) -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  checkInWaiver: (waiverId: text) -> (nat);
+  exportEmailSubscribersCSV: () -> (text) query;
+  fileDelete: (path: text) -> ();
+  fileList: () -> (vec FileMetadata) query;
+  fileRequest: (request: HttpRequest) -> (HttpResponse);
+  fileUpload: (path: text, contentType: text, content: blob, complete:
+   bool) -> ();
+  getAllMarketingInfo: () -> (vec MarketingInfo) query;
+  getBirthdayPackages: () -> (vec BirthdayPackage) query;
+  getCallerUserProfile: () -> (opt UserProfile) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getCheckInStats: () ->
+   (record {
+      frequentVisitors: vec UnifiedWaiverForm;
+      totalCheckIns: nat;
+    }) query;
+  getCommunityPosts: () -> (vec CommunityPost) query;
+  getContactSubmissions: () -> (vec ContactSubmission) query;
+  getEmailSubscribers: () -> (vec EmailSubscriber) query;
+  getGalleryImages: () -> (vec GalleryImage) query;
+  getLanguagePreference: () -> (opt text) query;
+  getNewWaivers: (sinceTimestamp: int) -> (vec UnifiedWaiverForm) query;
+  getPredefinedGalleryImages: () -> (vec GalleryImage) query;
+  getRecentWaivers: () -> (vec UnifiedWaiverForm) query;
+  getSubscriberCount: () -> (nat) query;
+  getTestimonials: () -> (vec Testimonial) query;
+  getTotalCheckIns: (waiverId: text) -> (nat) query;
+  getTranslation: (originalText: text) -> (opt text) query;
+  getUserProfile: (user: principal) -> (opt UserProfile) query;
+  getWaiversWithVisitCounts: () -> (vec UnifiedWaiverForm) query;
+  getWebsiteContent: () -> (WebsiteContent) query;
+  httpStreamingCallback: (token: StreamingToken) ->
+   (StreamingCallbackHttpResponse) query;
+  importTranslations: (entries: vec TranslationEntry) -> ();
+  initializeAccessControl: () -> ();
+  isCallerAdmin: () -> (bool) query;
+  listAllWaivers: () -> (vec UnifiedWaiverForm) query;
+  listLanguagePreferences: () -> (vec LanguagePreference) query;
+  listTranslations: () -> (vec TranslationEntry) query;
+  removeBirthdayPackage: (id: text) -> ();
+  removeCommunityPost: (id: text) -> ();
+  removeGalleryImage: (id: text) -> ();
+  removeLanguagePreference: () -> ();
+  removeTestimonial: (id: text) -> ();
+  resetAdminAccess: () -> ();
+  saveCallerUserProfile: (profile: UserProfile) -> ();
+  searchWaivers: (searchTerm: text) -> (vec UnifiedWaiverForm) query;
+  setLanguagePreference: (language: text) -> ();
+  submitUnifiedWaiver: (parentName: text, parentEmail: text, parentPhone:
+   text, children: vec Child, agreeUnifiedTerms: bool, termsAndConditions:
+   text) -> (text);
+  subscribeEmail: (email: text) -> (bool);
+  unifiedWaiverSearch: (searchTerm: text) -> (vec UnifiedWaiverForm) query;
+  updateWebsiteContent: (content: WebsiteContent) -> ();
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://kids405.com</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://kids405.com/assets/og-image.jpg</image:loc>
+      <image:title>KIDS Indoor Play & Event - Oklahoma City Indoor Playground</image:title>
+      <image:caption>Oklahoma City's premier indoor playground for children 6 months to 10 years</image:caption>
+    </image:image>
+  </url>
+
+  <!-- Media/Gallery Section -->
+  <url>
+    <loc>https://kids405.com#media</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Pricing Section -->
+  <url>
+    <loc>https://kids405.com#pricing</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- About/Contact Section -->
+  <url>
+    <loc>https://kids405.com#about</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Community Board -->
+  <url>
+    <loc>https://kids405.com#community</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Testimonials Section -->
+  <url>
+    <loc>https://kids405.com#testimonials</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Waivers Section -->
+  <url>
+    <loc>https://kids405.com#waivers</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Alternative domain -->
+  <url>
+    <loc>https://www.kids405.com</loc>
+    <lastmod>2025-01-15T10:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+</urlset>

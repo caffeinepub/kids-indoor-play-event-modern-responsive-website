@@ -1,0 +1,150 @@
+// Version: 1.0.0
+type Asset__642177888 = {chunks : [Blob]; mimeType : Text};
+type BirthdayPackage__823554657 =
+  {
+    additionalChildPrice : Nat;
+    description : Text;
+    id : Text;
+    includedChildren : Nat;
+    name : Text;
+    roomTime : Text;
+    socksIncluded : Nat;
+    weekdayPrice : Nat;
+    weekendPrice : Nat
+  };
+type Child__569004700 = {birthday : ?Text; name : Text};
+type CommunityPost__1018575558 =
+  {author : Text; content : Text; id : Text; timestamp : Int; title : Text};
+type ContactSubmission__390548495 =
+  {
+    email : Text;
+    eventDate : Text;
+    id : Text;
+    message : Text;
+    name : Text;
+    numChildren : Nat;
+    phone : Text;
+    timestamp : Int
+  };
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type EmailSubscriber__426088537 = {email : Text; timestamp : Time__900049286};
+type GalleryImage__462113870 =
+  {description : Text; id : Text; timestamp : Int; url : Text};
+type Int__270357528 = Int__616954475;
+type Int__616954475 = Int;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type LanguagePreference__889282153 = {language : Text; userId : Principal};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type MarketingInfo__912055081 =
+  {email : Text; name : Text; phone : Text; timestamp : Int};
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type Testimonial__393323594 =
+  {customerName : Text; id : Text; review : Text; timestamp : Int};
+type Time__796480547 = Int__270357528;
+type Time__900049286 = Time__796480547;
+type TranslationEntry__146120456 =
+  {originalText : Text; translatedText : Text};
+type UnifiedWaiverForm__601867336 =
+  {
+    agreeUnifiedTerms : Bool;
+    children : [Child__569004700];
+    id : Text;
+    parentEmail : Text;
+    parentName : Text;
+    parentPhone : Text;
+    termsAndConditions : Text;
+    timestamp : Int;
+    visitCount : Nat
+  };
+type UserProfile__491224006 = {name : Text};
+type UserRole__521596351 = {#admin; #guest; #user};
+type WebsiteContent__459367676 =
+  {
+    aboutText : Text;
+    contactInfo : Text;
+    homepageText : Text;
+    operatingHours : Text
+  };
+actor {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__521596351>
+    };
+  stable var birthdayPackages :
+    {
+      var root : Node__46230540<Text, BirthdayPackage__823554657>;
+      var size : Nat__490723111
+    };
+  stable var communityPosts :
+    {
+      var root : Node__46230540<Text, CommunityPost__1018575558>;
+      var size : Nat__490723111
+    };
+  stable var contactSubmissions :
+    {
+      var root : Node__46230540<Text, ContactSubmission__390548495>;
+      var size : Nat__490723111
+    };
+  stable corsHeaders : [(Text, Text)];
+  stable var emailSubscribers :
+    {
+      var root : Node__46230540<Text, EmailSubscriber__426088537>;
+      var size : Nat__490723111
+    };
+  stable var galleryImages :
+    {
+      var root : Node__46230540<Text, GalleryImage__462113870>;
+      var size : Nat__490723111
+    };
+  stable var languagePreferences :
+    {
+      var root : Node__46230540<Principal, LanguagePreference__889282153>;
+      var size : Nat__490723111
+    };
+  stable var marketingInfo :
+    {
+      var root : Node__46230540<Text, MarketingInfo__912055081>;
+      var size : Nat__490723111
+    };
+  stable notFoundResponse : Blob;
+  stable var storage :
+    {
+      var assets : Map__605269027<Text, Asset__642177888>;
+      var pending : Map__605269027<Text, Asset__642177888>
+    };
+  stable var testimonials :
+    {
+      var root : Node__46230540<Text, Testimonial__393323594>;
+      var size : Nat__490723111
+    };
+  stable var translations :
+    {
+      var root : Node__46230540<Text, TranslationEntry__146120456>;
+      var size : Nat__490723111
+    };
+  stable var userProfiles :
+    {
+      var root : Node__46230540<Principal, UserProfile__491224006>;
+      var size : Nat__490723111
+    };
+  stable var waivers :
+    {
+      var root : Node__46230540<Text, UnifiedWaiverForm__601867336>;
+      var size : Nat__490723111
+    };
+  stable var websiteContent :
+    {
+      var root : Node__46230540<Text, WebsiteContent__459367676>;
+      var size : Nat__490723111
+    }
+};

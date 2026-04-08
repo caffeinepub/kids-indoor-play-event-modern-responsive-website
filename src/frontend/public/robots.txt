@@ -1,0 +1,45 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://kids405.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Allow all search engines to index the site
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block access to admin areas and sensitive paths
+Disallow: /admin
+Disallow: /waiver-check
+Disallow: /.well-known/
+Disallow: /src/
+Disallow: /node_modules/
+
+# Allow important pages for SEO
+Allow: /
+Allow: /#media
+Allow: /#pricing
+Allow: /#about
+Allow: /#community
+Allow: /#testimonials
+Allow: /#waivers
+
+# Additional SEO directives
+User-agent: *
+Disallow: /private/
+Disallow: /temp/
+Disallow: /*.json$
+Disallow: /*?*
+Allow: /assets/
+Allow: /favicon.ico
+Allow: /apple-touch-icon.png
+Allow: /site.webmanifest

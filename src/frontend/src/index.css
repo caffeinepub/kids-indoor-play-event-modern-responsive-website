@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode colors using OKLCH */
+    --background: oklch(100% 0 0);
+    --foreground: oklch(20% 0 0);
+    --card: oklch(100% 0 0);
+    --card-foreground: oklch(20% 0 0);
+    --popover: oklch(100% 0 0);
+    --popover-foreground: oklch(20% 0 0);
+    --primary: oklch(60% 0.2 270);
+    --primary-foreground: oklch(100% 0 0);
+    --secondary: oklch(96% 0.01 270);
+    --secondary-foreground: oklch(20% 0 0);
+    --muted: oklch(96% 0.01 270);
+    --muted-foreground: oklch(50% 0.01 270);
+    --accent: oklch(96% 0.01 270);
+    --accent-foreground: oklch(20% 0 0);
+    --destructive: oklch(60% 0.2 25);
+    --destructive-foreground: oklch(100% 0 0);
+    --border: oklch(90% 0.01 270);
+    --input: oklch(90% 0.01 270);
+    --ring: oklch(60% 0.2 270);
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark mode colors using OKLCH */
+    --background: oklch(20% 0.01 270);
+    --foreground: oklch(98% 0 0);
+    --card: oklch(20% 0.01 270);
+    --card-foreground: oklch(98% 0 0);
+    --popover: oklch(20% 0.01 270);
+    --popover-foreground: oklch(98% 0 0);
+    --primary: oklch(70% 0.15 270);
+    --primary-foreground: oklch(20% 0 0);
+    --secondary: oklch(30% 0.02 270);
+    --secondary-foreground: oklch(98% 0 0);
+    --muted: oklch(30% 0.02 270);
+    --muted-foreground: oklch(65% 0.02 270);
+    --accent: oklch(30% 0.02 270);
+    --accent-foreground: oklch(98% 0 0);
+    --destructive: oklch(60% 0.2 25);
+    --destructive-foreground: oklch(98% 0 0);
+    --border: oklch(30% 0.02 270);
+    --input: oklch(30% 0.02 270);
+    --ring: oklch(70% 0.15 270);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: oklch(96% 0.01 270);
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(60% 0.2 270);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(50% 0.2 270);
+}
+
+/* Animations */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out;
+}
+
+/* Focus visible styles for accessibility */
+*:focus-visible {
+  outline: 2px solid oklch(60% 0.2 270);
+  outline-offset: 2px;
+}
+
+/* Touch-friendly targets for mobile */
+.touch-manipulation {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ensure touch targets are at least 44x44px for buttons and links */
+button:not(.min-h-0),
+a:not(.min-h-0) {
+  min-height: 44px;
+}
+
+/* Logo enhancement utilities */
+.logo-glow {
+  filter: drop-shadow(0 0 10px rgba(147, 51, 234, 0.3));
+}
+
+.logo-container {
+  transition: all 0.3s ease;
+}
+
+.logo-container:hover {
+  transform: scale(1.05);
+}
+
+/* Mobile-optimized text sizing */
+@media (max-width: 640px) {
+  html {
+    font-size: 16px; /* Prevent zoom on input focus in iOS */
+  }
+}
+
+/* Improved mobile spacing */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+/* Better mobile table scrolling */
+@media (max-width: 768px) {
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
