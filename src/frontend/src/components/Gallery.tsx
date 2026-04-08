@@ -1,37 +1,48 @@
 import { Camera, Image as ImageIcon, Loader2 } from "lucide-react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import type { FileMetadata } from "../backend";
 import { getFileUrlSync } from "../file-storage/FileList";
-import { useGetGalleryImages } from "../hooks/useQueries";
+import { useFileList } from "../hooks/useQueries";
 import GalleryLightbox from "./GalleryLightbox";
 
+// Adapt FileMetadata into the shape GalleryLightbox expects
+interface GalleryItem {
+  id: string;
+  url: string;
+  description: string;
+}
+
 export default function Gallery() {
-  const { data: galleryImages = [], isLoading } = useGetGalleryImages();
+  const { data: fileList = [], isLoading } = useFileList();
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  // Helper to normalize image URLs
-  const normalizeImageUrl = (url: string): string => {
-    if (url.startsWith("http://") || url.startsWith("https://")) {
-      return url;
-    }
-    if (url.startsWith("/images/")) {
-      return url;
-    }
-    return getFileUrlSync(url);
-  };
+  // Filter to image files only and build display-ready objects (newest-first by path sort)
+  const galleryImages: GalleryItem[] = useMemo(() => {
+    const imageFiles = fileList.filter((f: FileMetadata) =>
+      f.mimeType.startsWith("image/"),
+    );
+    // Reverse order so most recently uploaded (last in list) appears first
+    return [...imageFiles].reverse().map((f: FileMetadata) => ({
+      id: f.path,
+      url: getFileUrlSync(f.path),
+      description:
+        f.path
+          .split("/")
+          .pop()
+          ?.replace(/\.[^/.]+$/, "") ?? "Photo",
+    }));
+  }, [fileList]);
+
+  const normalizeImageUrl = (url: string): string => url;
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
     setLightboxOpen(true);
   };
 
-  const closeLightbox = () => {
-    setLightboxOpen(false);
-  };
-
-  const navigateLightbox = (index: number) => {
-    setLightboxIndex(index);
-  };
+  const closeLightbox = () => setLightboxOpen(false);
+  const navigateLightbox = (index: number) => setLightboxIndex(index);
 
   return (
     <section
@@ -62,12 +73,13 @@ export default function Gallery() {
               <button
                 type="button"
                 key={image.id}
+                data-ocid="gallery-image-btn"
                 className="group relative break-inside-avoid rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-200 bg-white cursor-pointer w-full text-left"
                 onClick={() => openLightbox(index)}
               >
                 <img
-                  src={normalizeImageUrl(image.url)}
-                  alt={image.description || "Play area photo"}
+                  src={image.url}
+                  alt={image.description}
                   className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
                   loading="lazy"
                   onError={(e) => {
@@ -80,7 +92,7 @@ export default function Gallery() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-4">
                     <p className="text-white text-sm font-medium line-clamp-2">
-                      {image.description || "Play Area Gallery"}
+                      {image.description}
                     </p>
                   </div>
                 </div>
@@ -88,10 +100,13 @@ export default function Gallery() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
+          <div
+            className="flex flex-col items-center justify-center py-16 text-center"
+            data-ocid="gallery-empty-state"
+          >
             <ImageIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-500 text-lg font-medium">
-              No images yet — upload some photos in the admin panel.
+              No photos yet — upload some photos in the admin panel.
             </p>
           </div>
         )}
